@@ -8,15 +8,18 @@ class UserManager(BaseUserManager):
 
     def create_user(self, email, password=None, **extra_fields):
         """Create and save new user"""
+        # Can access the model that the manager is for by just typing self.model; same as creating new user model
+        # and assigning to user variable
         user = self.model(email=email, **extra_fields)
         """Password need encryption so need specific api"""
         user.set_password(password)
-        """Required for supporting mutliple db"""
+        """Required for supporting multiple db"""
         user.save(using=self.db)
         return user
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    """Extend User from AbstractBaseUser and PermissionsMixin"""
     """Custom user model that supports using email instead of username"""
     email = models.EmailField(max_length=255, unique=True)
     name = models.CharField(max_length=255)

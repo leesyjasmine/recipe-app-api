@@ -1,0 +1,15 @@
+version: "3"
+
+# build set to current directory
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    # maps volume from local machine into Docker container that will be running application
+    # when you change something in local, will map to Docker so that dont need to restart Docker and reflected in Docker
+    volumes:
+      - ./app:/app
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8000"

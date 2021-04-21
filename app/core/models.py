@@ -8,13 +8,27 @@ class UserManager(BaseUserManager):
 
     def create_user(self, email, password=None, **extra_fields):
         """Create and save new user"""
-        # Can access the model that the manager is for by just typing self.model; same as creating new user model
-        # and assigning to user variable
-        user = self.model(email=email, **extra_fields)
+        # 1) Can access the model that the manager is for
+        # by just typing self.model;
+        # same as creating new user model and assigning to user variable
+        if not email:
+            raise ValueError('Users must have an email address')
+        # 2) self.normalize_email => normalize the email address
+        # by lowercasing the domain part
+        user = self.model(email=self.normalize_email(email), **extra_fields)
         """Password need encryption so need specific api"""
         user.set_password(password)
         """Required for supporting multiple db"""
         user.save(using=self.db)
+        return user
+
+    def create_superuser(self, email, password):
+        """Creates and save a new super user"""
+        user = self.create_user(email, password)
+        user.is_staff = True
+        user.is_superuser = True
+        user.save(using=self.db)
+
         return user
 
 

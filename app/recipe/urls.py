@@ -6,6 +6,7 @@ from recipe import views
 # default router will register appropriate url for all the actions
 router = DefaultRouter()
 router.register('tags', views.TagViewSet)
+router.register('ingredients', views.IngredientViewSet)
 
 app_name = 'recipe'
 

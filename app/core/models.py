@@ -72,3 +72,28 @@ class Ingredient(models.Model):
     # string representation of model
     def __str__(self):
         return self.name
+
+
+class Recipe(models.Model):
+    title = models.CharField(max_length=255)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    time_minutes = models.IntegerField()
+    price = models.DecimalField(max_digits=5, decimal_places=2)
+    # blank is not same as null.;
+    # If no value passed, field will set as blank;
+    # Udemy recommend use blank instead of null for easier check;
+    # because in this case after check null still need check blank;
+    # before redirect to link
+    link = models.CharField(max_length=255, blank=True)
+    # It is possible to put Ingredient as a class
+    # instead of 'Ingredient' as a string.
+    # However, if put Ingredient as a class, need to sort
+    # the class according to dependency so put as string is better
+    ingredients = models.ManyToManyField('Ingredient')
+    tags = models.ManyToManyField('Tag')
+
+    def __str__(self):
+        return self.title

@@ -8,6 +8,7 @@ from django.conf import settings
 
 def recipe_image_file_path(instance, filename):
     """Generate file path for new recipe image"""
+    # 2 args: instance that is creating path, original filename of file
     ext = filename.split('.')[-1]
     filename = f'{uuid.uuid4()}.{ext}'
 
@@ -104,6 +105,10 @@ class Recipe(models.Model):
     # the class according to dependency so put as string is better
     ingredients = models.ManyToManyField('Ingredient')
     tags = models.ManyToManyField('Tag')
+    # recipe_image_file_path has no bracket because we do not
+    # want to call the function, we only want to pass a
+    # reference to the function so it can be called every time we upload
+    # and it gets called in background by Django by the ImageField
     image = models.ImageField(null=True, upload_to=recipe_image_file_path)
 
     def __str__(self):
